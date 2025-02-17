@@ -21,39 +21,31 @@ async function getBookEntries() {
 async function renderEntries() {
     const entriesTable = document.getElementById('entriesTable');
     const entries = await getBookEntries();
-
     if (entries.length === 0) {
         entriesTable.innerHTML = "<tr><td colspan='6'>Brak wpisów w książce.</td></tr>";
         return;
     }
-
     entries.sort((a, b) => a.date_and_time.seconds - b.date_and_time.seconds);
-
     entriesTable.innerHTML = "";
 
     for (const entry of entries) {
         const row = document.createElement('tr');
-
         const checkboxCell = document.createElement('td');
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
         checkbox.dataset.entryId = entry.id;
         checkboxCell.appendChild(checkbox);
         row.appendChild(checkboxCell);
-
         const dateCell = document.createElement('td');
         const date = new Date(entry.date_and_time.seconds * 1000);
         dateCell.textContent = date.toLocaleString();
         row.appendChild(dateCell);
-
         const nameCell = document.createElement('td');
         nameCell.textContent = entry.name;
         row.appendChild(nameCell);
-
         const addressCell = document.createElement('td');
         addressCell.textContent = entry.address_or_license;
         row.appendChild(addressCell);
-
         const signatureCell = document.createElement('td');
         try {
             const fetchURL = `${BACKEND_URL}/signed-url/${entry.signature_file_id}`;
@@ -83,9 +75,7 @@ async function renderEntries() {
             signatureCell.textContent = "Błąd pobierania podpisu: " + error.message;
         }
         row.appendChild(signatureCell);
-
         const actionsCell = document.createElement('td');
-        
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Usuń';
         deleteButton.dataset.entryId = entry.id;
@@ -94,14 +84,12 @@ async function renderEntries() {
             deleteEntry(entry.id);
         });
         actionsCell.appendChild(deleteButton);
-
         row.appendChild(actionsCell);
         entriesTable.appendChild(row);
     }
 
     // Sprawdzenie, czy przycisk "Usuń zaznaczone" już istnieje
     let deleteSelectedButton = document.getElementById('deleteSelectedButton'); // Pobieramy przycisk po ID
-
     if (!deleteSelectedButton) { // Jeśli przycisk nie istnieje, to go tworzymy i dodajemy
         deleteSelectedButton = document.createElement('button');
         deleteSelectedButton.id = 'deleteSelectedButton'; // Dodajemy ID do przycisku
@@ -120,23 +108,19 @@ async function deleteEntry(entryId) {
         alert('Musisz być zalogowany, aby usunąć wpis.');
         return;
     }
-
     try {
         const token = await auth.currentUser.getIdToken(); // Pobierz token JWT
-
         const response = await fetch(`${BACKEND_URL}/delete-entry/${entryId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}` // Dodaj token do nagłówka
             }
         });
-
         if (!response.ok) {
             const errorData = await response.json();
             console.error('Błąd usuwania wpisu:', errorData);
             alert('Błąd usuwania wpisu: ' + errorData.error);
         } else {
-            console.log('Wpis usunięty');
             renderEntries(); // Odśwież tabelę
         }
     } catch (error) {
@@ -150,10 +134,8 @@ async function deleteSelectedEntries(entryIds) {
         alert('Musisz być zalogowany, aby usunąć wpisy.');
         return;
     }
-
     try {
         const token = await auth.currentUser.getIdToken(); // Pobierz token JWT
-
         const response = await fetch(`${BACKEND_URL}/delete-selected`, {
             method: 'DELETE',
             headers: {
@@ -168,7 +150,6 @@ async function deleteSelectedEntries(entryIds) {
             console.error('Błąd usuwania wybranych wpisów:', errorData);
             alert('Błąd usuwania wybranych wpisów: ' + errorData.error);
         } else {
-            console.log('Wybrane wpisy usunięte');
             renderEntries(); // Odśwież tabelę
         }
     } catch (error) {
@@ -206,7 +187,6 @@ function updateUI(user) {
     const logoutButton = document.getElementById("logout-button");
     const registerButton = document.getElementById("registerButtonRoute");
     const loginButton = document.getElementById("loginButtonRoute");
-
     if (userInfoDiv) { 
         if (user) {
             const displayName = user.displayName || user.email;
@@ -269,12 +249,10 @@ function createRegisterView() {
 async function uploadSignature(blob) {
     try {
         const token = await auth.currentUser.getIdToken(); // Pobierz token JWT
-
         const formData = new FormData();
         formData.append('file', blob, 'signature.png');
         formData.append('name', document.getElementById('name').value);
         formData.append('address', document.getElementById('address').value);
-
         const res = await fetch(`${BACKEND_URL}/upload`, {
             method: 'POST',
             body: formData,
@@ -282,9 +260,7 @@ async function uploadSignature(blob) {
                 'Authorization': `Bearer ${token}` // Dodaj token do nagłówka
             }
         });
-
         const data = await res.json();
-        console.log("Odpowiedź serwera:", data);
         return data.publicId;
     } catch (error) {
         console.error("Błąd przesyłania podpisu:", error);
@@ -292,16 +268,13 @@ async function uploadSignature(blob) {
     }
 }
  
-// Function to save entry to Firestore
+// Funkcja do zapisywania wpisów w Firestore
 async function saveCustomerEntry(name, address, signatureUrl) {
-    console.log("Wywołano funkcję saveCustomerEntry z argumentami:", name, address, signatureUrl); // Dodajemy logowanie na początku funkcji
-
     if (!signatureUrl) {
         console.error("Signature URL is undefined. Cannot save to Firestore.");
         alert("Błąd: Nie można zapisać wpisu. Spróbuj ponownie.");
         return;
     }
-
     const entryData = {
         name: name,
         address_or_license: address,
@@ -311,7 +284,6 @@ async function saveCustomerEntry(name, address, signatureUrl) {
 
     try {
         alert("Entry saved successfully!");
-
         page('/');
     } catch (error) {
         console.error("Error saving entry to Firestore:", error);
@@ -320,43 +292,31 @@ async function saveCustomerEntry(name, address, signatureUrl) {
 }
 
 async function initializeEntryForm() {
-    console.log("initializeEntryForm() została wywołana"); // Dodajemy logowanie na początku funkcji
     const entryForm = document.getElementById('entryForm');
     if (entryForm) {
         entryForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-
             if (signaturePad.isEmpty()) {
                 alert("Proszę dostarczyć podpis.");
                 return;
             }
-
             const blob = await new Promise(resolve => {
                 const dataURL = signaturePad.toDataURL();
                 fetch(dataURL).then(response => response.blob()).then(resolve);
             });
-
-            console.log("Blob:", blob);
-            console.log("Przed uploadSignature()"); // Dodajemy logowanie przed wywołaniem uploadSignature
             let signatureUrl = null;
             try {
                 signatureUrl = await uploadSignature(blob);
-                console.log("URL podpisu:", signatureUrl);
-                console.log("Po uploadSignature(), signatureUrl:", signatureUrl); // Dodajemy logowanie po wywołaniu uploadSignature
             } catch (error) {
                 alert("Błąd podczas przesyłania podpisu. Spróbuj ponownie.");
                 return;
             }
-
             const name = document.getElementById('name').value;
             const address = document.getElementById('address').value;
-
-            console.log("Przed saveCustomerEntry()"); // Dodajemy logowanie przed wywołaniem saveCustomerEntry
             await saveCustomerEntry(name, address, signatureUrl);
         });
     }
 }
-
 
 // Widok tworzenia wpisu
 function createNewEntryView() {
@@ -386,7 +346,6 @@ function createNewEntryView() {
 function initializeSignaturePad() {
     const canvas = document.getElementById('signaturePad');
     signaturePad = new SignaturePad(canvas);
-
     document.getElementById('clearSignatureButton').addEventListener('click', () => {
         signaturePad.clear();
     });
@@ -418,7 +377,6 @@ function createReadBookView() {
 function login() {
     const email = document.getElementById('loginEmail').value;
     const password = document.getElementById('loginPassword').value;
-
     signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             const user = userCredential.user;
@@ -436,7 +394,6 @@ function login() {
 function register() {
     const email = document.getElementById('registerEmail').value;
     const password = document.getElementById('registerPassword').value;
-
     createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             const user = userCredential.user;
@@ -465,7 +422,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoutButton = document.getElementById("logout-button");
     const registerButton = document.getElementById("registerButton");
     const loginButton = document.getElementById("loginButton");
-
     function updateUI(user) {  // Funkcja updateUI wewnątrz DOMContentLoaded
         if (userInfoDiv) {
             if (user) {
@@ -504,7 +460,6 @@ page('/register', () => {
 });
 
 page('/new-entry', () => {
-    console.log("page('/new-entry') została wywołana"); // Dodajemy logowanie na początku funkcji
     if (!auth.currentUser) {
         alert('Musisz być zalogowany, aby dodać wpis.');
         page('/');
@@ -512,7 +467,7 @@ page('/new-entry', () => {
     }
     document.getElementById('app').innerHTML = createNewEntryView();
     initializeSignaturePad(); // Inicjalizacja Signature Pad
-    initializeEntryForm(); // Initialize the entry form event listener
+    initializeEntryForm(); // Inicjalizacja dla listenera formularza wpisu
 });
 
 page('/read-book', () => {

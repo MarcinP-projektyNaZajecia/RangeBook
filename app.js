@@ -148,12 +148,9 @@ app.delete('/delete-entry/:id', requireAuth, async (req, res) => {
       // WAŻNE: Czekamy na usunięcie z Cloudinary *przed* usunięciem z Firestore
       try {
           const cloudinaryResult = await cloudinary.uploader.destroy(signatureFileId);
-          console.log("Cloudinary destroy result:", cloudinaryResult); // Logujemy wynik usunięcia z Cloudinary
+          console.log("Cloudinary destroy result:", cloudinaryResult);
       } catch (cloudinaryError) {
           console.error("Błąd usuwania z Cloudinary:", cloudinaryError);
-          // Możemy tutaj zdecydować, czy chcemy kontynuować usuwanie z Firestore,
-          // czy też zwrócić błąd do klienta.  Zależy to od wymagań aplikacji.
-          // Przykład: Jeśli usunięcie z Cloudinary jest krytyczne, możemy zrobić tak:
           return res.status(500).json({ error: 'Failed to delete signature from Cloudinary' });
       }
 
@@ -191,8 +188,6 @@ app.delete('/delete-selected', requireAuth, async (req, res) => {
               console.log("Cloudinary destroy result for", entryId, ":", cloudinaryResult);
           } catch (cloudinaryError) {
               console.error("Błąd usuwania z Cloudinary dla", entryId, ":", cloudinaryError);
-              // Podobnie jak wyżej, możemy zdecydować, co zrobić w przypadku błędu
-              // Usuwamy z Firestore *niezależnie* od wyniku usuwania z Cloudinary
           }
 
           await deleteDoc(docRef);
@@ -213,9 +208,8 @@ function generateSignedUrl(publicId) {
       const timestamp = Math.round(new Date().getTime() / 1000);
       const url = cloudinary.url(publicId, {
           sign_url: true,
-          type: 'authenticated', // Określamy typ 'authenticated'
-          resource_type: 'image', // Dodajemy resource_type: 'image'
-          // format: 'png', // Dodajemy format: 'png' - opcjonalnie, jeśli chcesz wymusić PNG
+          type: 'authenticated',
+          resource_type: 'image',
           timestamp: timestamp
       });
 
@@ -253,8 +247,8 @@ app.get('/signed-url/:publicId', async (req, res) => {
       console.error("Błąd generowania signed URL:", error);
       return res.status(500).json({ error: "Error generating signed URL" });
 
-  } finally { // Dodajemy finally, aby zalogować odpowiedź niezależnie od wyniku
-      console.log("Odpowiedź serwera:", res.statusCode, res.statusMessage); // Logujemy status i wiadomość
+  } finally {
+      console.log("Odpowiedź serwera:", res.statusCode, res.statusMessage);
   }
 });
 
