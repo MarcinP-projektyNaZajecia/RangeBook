@@ -93,11 +93,12 @@ Serwer backendowy będzie nasłuchiwał na porcie 3000.
 
 ## Użycie
 
-1.  Otwórz aplikację w przeglądarce pod adresem `http://localhost:8080` (dla serwera deweloperskiego) lub adresem serwera produkcyjnego.
-2.  Zarejestruj się lub zaloguj, aby uzyskać dostęp do pełnej funkcjonalności.
-3.  Przeglądaj istniejące wpisy w książce pobytu.
-4.  Dodawaj nowe wpisy, wypełniając formularz i składając podpis elektroniczny.
-5.  Usuwaj wpisy (pojedyncze lub zaznaczone).
+1.  Otwórz aplikację w przeglądarce pod adresem `http://localhost:8080` (dla serwera deweloperskiego)
+    lub adresem serwera produkcyjnego.
+3.  Zarejestruj się lub zaloguj, aby uzyskać dostęp do pełnej funkcjonalności.
+4.  Przeglądaj istniejące wpisy w książce pobytu.
+5.  Dodawaj nowe wpisy, wypełniając formularz i składając podpis elektroniczny.
+6.  Usuwaj wpisy (pojedyncze lub zaznaczone).
 
 ## Autor
 
