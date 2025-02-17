@@ -1,15 +1,15 @@
 /* style.css */
 
-/* Ogólne style */
 body {
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-image: url('background.png');
-    background-size: cover;
-    background-size: 100% 135%;
-    background-position: center;
-    color: #333;
+    font-family: 'Roboto', sans-serif; /* Pozostaje, bo Bootstrap nie oferuje */
+    margin: 0; /* Można usunąć, bo Bootstrap domyślnie resetuje marginesy */
+    background-image: url('background.png'); /* Pozostaje */
+    background-size: cover; /* Pozostaje */
+    background-size: 100% 135%; /* Pozostaje */
+    background-position: center; /* Pozostaje */
+    color: #333; /* Pozostaje */
+
+    /* Dodajemy style z Bootstrapa */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -18,22 +18,28 @@ body {
 
 #app {
     padding: 20px;
-    max-width: 960px;
-    margin: 0 auto;
-    flex: 1;
+
+    /* Dodajemy style z Bootstrapa */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    flex: 1; /* Pozostaje */
+    max-width: 960px; /* Pozostaje */
+    margin: 0 auto; /* Pozostaje */
 }
 
 h1, h2 {
-    font-weight: 400;
+    font-weight: 400; /* Pozostaje */
 }
 
+/* Przyciski */
 button {
-    background-color: #2196f3;
-    color: white;
+    /* Używamy stylów z Bootstrapa dla przycisku */
+    @extend .btn;
+    @extend .btn-primary; /* Możesz wybrać inny styl przycisku, np. .btn-secondary, .btn-danger itp. */
+
+    /* Dodajemy własne style */
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
@@ -43,16 +49,23 @@ button {
 }
 
 button:hover {
-    background-color: #1976d2;
+    /* Nadpisujemy styl hover z Bootstrapa (opcjonalnie) */
+    background-color: #1976d2; /* Możesz dostosować kolor hover */
 }
 
 button:disabled {
+    /* Nadpisujemy styl disabled z Bootstrapa (opcjonalnie) */
     background-color: #bdbdbd;
     cursor: default;
 }
 
-/* Style dla tabeli */
+/* Tabela */
 table {
+    /* Używamy stylów z Bootstrapa dla tabeli */
+    @extend .table;
+    @extend .table-striped; /* Możesz wybrać inny styl tabeli, np. .table-bordered, .table-hover itp. */
+
+    /* Dodajemy własne style */
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
@@ -60,22 +73,32 @@ table {
 }
 
 th, td {
+    /* Używamy stylów z Bootstrapa dla komórki tabeli */
+    @extend .table-cell; /* To nie jest standardowa klasa Bootstrapa, więc możesz ją dodać samodzielnie w CSS */
+
+    /* Dodajemy własne style */
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #eee;
 }
 
 th {
+    /* Nadpisujemy style dla nagłówka tabeli */
     background-color: #f0f0f0;
     font-weight: 500;
 }
 
 tr:hover {
+    /* Nadpisujemy styl hover dla wiersza tabeli */
     background-color: #f9f9f9;
 }
 
-/* Style dla formularzy */
+/* Formularze */
 form {
+    /* Używamy stylów z Bootstrapa dla formularza */
+    @extend .form;
+
+    /* Dodajemy własne style */
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -84,11 +107,21 @@ form {
 }
 
 form label {
+    /* Używamy stylów z Bootstrapa dla etykiety formularza */
+    @extend .form-label;
+
+    /* Dodajemy własne style */
     display: block;
     margin-bottom: 5px;
 }
 
-form input[type="text"] {
+form input[type="text"],
+form input[type="email"],
+form input[type="password"] {
+    /* Używamy stylów z Bootstrapa dla pola tekstowego formularza */
+    @extend .form-control;
+
+    /* Dodajemy własne style */
     width: calc(100% - 12px);
     padding: 10px;
     margin-bottom: 10px;
@@ -97,6 +130,7 @@ form input[type="text"] {
     box-sizing: border-box;
 }
 
+/* Canvas */
 canvas {
     border: 1px solid #000;
     margin-bottom: 10px;
@@ -105,18 +139,46 @@ canvas {
     height: 200px;
 }
 
-/* Style dla widoku logowania/rejestracji */
-#loginForm, #registerForm {
+/* Logowanie/Rejestracja */
+#loginForm,
+#registerForm {
+    /* Używamy stylów z Bootstrapa dla formularza (opcjonalnie) */
+    @extend .form;
+
+    /* Dodajemy własne style */
     border: none;
     padding: 0;
     border-radius: 0;
     background-color: transparent;
     box-shadow: none;
+    max-width: 500px;
+    margin: 20px auto;
 }
 
-/* Style dla podpisu */
+#registerForm label,
+#loginForm label {
+    /* Używamy stylów z Bootstrapa dla etykiety formularza */
+    @extend .form-label;
+
+    /* Dodajemy własne style (jeśli potrzebne) */
+}
+
+#registerForm input,
+#loginForm input {
+    /* Używamy stylów z Bootstrapa dla pola tekstowego formularza */
+    @extend .form-control;
+
+    /* Dodajemy własne style (jeśli potrzebne) */
+}
+
+/* Podpis */
 #signaturePad {
     cursor: crosshair;
+    border: 1px solid #000;
+    margin-bottom: 10px;
+    width: 100%;
+    max-width: 400px;
+    height: 200px;
 }
 
 /* Dodatkowe style (opcjonalne) */
@@ -125,44 +187,54 @@ canvas {
     margin-top: 10px;
 }
 
-/* Style dla przycisku "Usuń zaznaczone" */
+/* Przycisk "Usuń zaznaczone" */
 #deleteSelectedButton {
-    background-color: #f44336;
+    /* Używamy stylów z Bootstrapa dla przycisku */
+    @extend .btn;
+    @extend .btn-danger; /* Używamy stylu .btn-danger dla przycisku "Usuń" */
+
+    /* Dodajemy własne style (opcjonalnie) */
 }
 
 #deleteSelectedButton:hover {
-    background-color: #d32f2f;
+    /* Nadpisujemy styl hover z Bootstrapa (opcjonalnie) */
 }
 
-/* Styl diva dla tabeli */
+
+/* Tło tabeli */
 .table-background {
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    max-height: 80vh; 
+    padding: 1.5rem; /* Odpowiednik Bootstrapowej klasy p-4 */
+    border-radius: 0.25rem; /* Odpowiednik Bootstrapowej klasy rounded */
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15); /* Odpowiednik Bootstrapowej klasy shadow */
+    background-color: rgba(255, 255, 255, 0.8); /* Białe tło z 80% opacity */
+    max-height: 80vh;
     display: flex;
     flex-direction: column;
-    overflow: hidden; 
+    overflow: hidden;
 }
 
 /* Style dla tabeli */
 #entriesTable {
     width: 100%;
-    flex: 1; 
+    flex: 1;
     border-collapse: collapse;
-    display: block; 
-    table-layout: fixed; 
-    overflow: auto; 
+    display: block;
+    table-layout: fixed;
+    overflow: auto;
 }
 
 #entriesTable tbody {
     display: block;
-    height: auto; 
+    height: auto;
     overflow-y: auto;
 }
 
-#entriesTable th, #entriesTable td {
+#entriesTable th,
+#entriesTable td {
+    /* Używamy stylów z Bootstrapa dla komórki tabeli (opcjonalnie) */
+    @extend .table-cell; /* To nie jest standardowa klasa Bootstrapa, więc możesz ją dodać samodzielnie w CSS */
+
+    /* Dodajemy własne style */
     padding: 12px;
     box-sizing: border-box;
 }
@@ -175,26 +247,31 @@ canvas {
     margin: 0 auto;
 }
 
-/* Style dla widoku startowego */
+/* Widok startowy */
 #start-view-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    width: 100vw;
+    @extend .d-flex;
+    @extend .flex-column;
+    @extend .align-items-center;
+    @extend .justify-content-center;
+    @extend .vh-100;
+    @extend .vw-100;
     padding: 20px;
     box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 0.8); /* Białe tło z 80% opacity */
+    border-radius: 10px; /* Lekko zaokrąglone rogi */
 }
 
 #start-view-content {
+    /* Używamy klas Bootstrapa do paddingu, zaokrąglenia rogów, cienia i tła */
+    @extend .p-4;
+    @extend .rounded;
+    @extend .shadow;
+    @extend .bg-white;
+
+    /* Dodajemy własne style */
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     max-width: 70%;
     width: 70%;
     max-height: 70%;
@@ -202,72 +279,98 @@ canvas {
 }
 
 #start-view-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    /* Używamy klas Bootstrapa do ułożenia elementów (flexbox) */
+    @extend .d-flex;
+    @extend .justify-content-between;
+    @extend .align-items-center;
+
+    /* Dodajemy własne style */
     width: 100%;
     margin-bottom: 10px;
 }
 
 #user-info {
+    /* Dodajemy własne style */
     text-align: left;
 }
 
 #auth-buttons {
-    display: flex;
-    gap: 10px;
+    /* Używamy klas Bootstrapa do ułożenia elementów (flexbox) */
+    @extend .d-flex;
+    @extend .gap-2; /* Dodajemy odstęp między przyciskami */
 }
 
 #start-view-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    /* Używamy klas Bootstrapa do ułożenia elementów (flexbox) */
+    @extend .d-flex;
+    @extend .flex-column;
+    @extend .gap-2; /* Dodajemy odstęp między przyciskami */
+
+    /* Dodajemy własne style */
     width: auto;
     margin-top: 10px;
     align-items: center;
 }
 
 #start-view-buttons button {
+    /* Używamy stylów z Bootstrapa dla przycisku */
+    @extend .btn;
+    @extend .btn-primary; /* Możesz wybrać inny styl przycisku */
+
+    /* Dodajemy własne style */
     width: auto;
     min-width: 200px;
     padding: 10px 20px;
 }
 
-/* Dodajemy wspólną klasę dla kontenerów */
+/* Wspólne style kontenerów */
 .view-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    width: 100vw;
+    /* Używamy klas Bootstrapa do ułożenia elementów (flexbox) i responsywności */
+    @extend .d-flex;
+    @extend .flex-column;
+    @extend .align-items-center;
+    @extend .justify-content-center;
+    @extend .vh-100;
+    @extend .vw-100;
+
+    /* Dodajemy własne style */
     padding: 20px;
     box-sizing: border-box;
 }
 
 .view-content {
+    /* Używamy klas Bootstrapa do paddingu, zaokrąglenia rogów, cienia i tła */
+    @extend .p-4;
+    @extend .rounded;
+    @extend .shadow;
+    @extend .bg-white;
+
+    /* Dodajemy własne style */
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     max-width: 800px;
     width: 90%;
     margin: 20px auto;
 }
 
-/* Style dla przycisków akcji */
+/* Przyciski akcji */
 .action-buttons {
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    gap: 10px; 
-    margin-top: 10px; 
+    /* Używamy klas Bootstrapa do ułożenia elementów (flexbox) */
+    @extend .d-flex;
+    @extend .justify-content-center;
+    @extend .align-items-center;
+    @extend .gap-2; /* Dodajemy odstęp między przyciskami */
+
+    /* Dodajemy własne style */
+    margin-top: 10px;
 }
 
 .action-buttons button {
+    /* Używamy stylów z Bootstrapa dla przycisku */
+    @extend .btn;
+
+    /* Dodajemy własne style */
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
@@ -276,52 +379,76 @@ canvas {
 }
 
 #clearSignatureButton {
-    background-color: #f44336;
-    color: white;
-}
-
-#clearSignatureButton:hover {
-    background-color: #d32f2f;
+    /* Używamy stylu .btn-danger dla przycisku "Skasuj" */
+    @extend .btn-danger;
 }
 
 #entryForm button[type="submit"] {
-    background-color: #4CAF50;
-    color: white;
-}
-
-#entryForm button[type="submit"]:hover {
-    background-color: #45a049;
+    /* Używamy stylu .btn-success dla przycisku "Zapisz" */
+    @extend .btn-success;
 }
 
 #backButton {
-    background-color: #2196f3;
-    color: white;
-}
-
-#backButton:hover {
-    background-color: #1976d2;
+    /* Używamy stylu .btn-primary dla przycisku "Wróć" */
+    @extend .btn-primary;
 }
 
 #new-entry-container {
     margin-top: 10%;
+    background-color: rgba(255, 255, 255, 0.8); /* Białe tło z 80% opacity */
+    border-radius: 10px; /* Lekko zaokrąglone rogi */
+    padding: 20px; /* Dodajemy padding */
 }
 
-
-/* Style dla widoku logowania/rejestracji */
-#loginForm, #registerForm {
-    border: none;
-    padding: 0;
-    border-radius: 0;
-    background-color: transparent;
-    box-shadow: none;
-    max-width: 500px; /* Dodajemy max-width */
-    margin: 20px auto; /* Dodajemy margin, aby wyśrodkować formularz */
+#register-form-container, #login-form-container {
+    background-color: rgba(255, 255, 255, 0.8); 
+    border-radius: 10px; 
+    padding: 20px;
 }
 
-#registerForm label,  
-#registerForm input { 
-    width: calc(100% - 12px); 
-    box-sizing: border-box;
+/* Przyciski nawigacyjne (niebieskie) */
+button[data-route], /* Selektor dla przycisków z atrybutem data-route */
+#logout-button, /* Dodajemy selektor dla przycisku wylogowania */
+#loginButton, /* Dodajemy selektor dla przycisku logowania */
+#registerButton /* Dodajemy selektor dla przycisku rejestracji */
+{
+    background-color: #2196F3; /* Niebieski */
+    color: white; /* Biały tekst dla lepszego kontrastu */
 }
 
+button[data-route]:hover,
+#logout-button:hover,
+#loginButton:hover,
+#registerButton:hover {
+    background-color: #1976D2; /* Ciemniejszy niebieski na hover */
+}
 
+/* Przyciski zatwierdzenia (zielone) */
+#entryForm button[type="submit"], /* Przycisk "Zapisz" */
+#loginButton, /* Przycisk "Zaloguj się" w formularzu logowania */
+#registerButton /* Przycisk "Zarejestruj" w formularzu rejestracji */
+{
+    background-color: #4CAF50; /* Zielony */
+    color: white; /* Biały tekst */
+}
+
+#entryForm button[type="submit"]:hover,
+#loginButton:hover,
+#registerButton:hover {
+    background-color: #43A047; /* Ciemniejszy zielony na hover */
+}
+
+/* Przyciski anulowania/usunięcia (czerwone) */
+#clearSignatureButton, 
+#deleteSelectedButton,
+button[data-action="delete"] 
+{
+    background-color: #F44336; 
+    color: white; 
+}
+
+#clearSignatureButton:hover,
+#deleteSelectedButton:hover {
+    background-color: #D32F2F; /* Ciemniejszy czerwony na hover */
+}
+ 

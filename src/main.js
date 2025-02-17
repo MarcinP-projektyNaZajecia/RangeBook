@@ -1,6 +1,7 @@
 import page from '/node_modules/page/page.mjs';
 import { db, auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, collection, getDocs } from './firebase.js';
 import SignaturePad from '/node_modules/signature_pad/dist/signature_pad.js';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import '../public/style.css';
 
 let signaturePad;
@@ -88,6 +89,7 @@ async function renderEntries() {
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Usuń';
         deleteButton.dataset.entryId = entry.id;
+        deleteButton.dataset.action = 'delete';
         deleteButton.addEventListener('click', () => {
             deleteEntry(entry.id);
         });
@@ -183,8 +185,8 @@ function createStartView() {
                 <div id="start-view-header">
                     <div id="user-info"></div>
                     <div id="auth-buttons">
-                        <button data-route="/login" id="loginButton">Zaloguj się</button>
-                        <button data-route="/register" id="registerButton" style="display: none;">Zarejestruj użytkownika</button>
+                        <button data-route="/login" id="loginButtonRoute">Zaloguj się</button>
+                        <button data-route="/register" id="registerButtonRoute" style="display: none;">Zarejestruj użytkownika</button>
                         <button id="logout-button" style="display: none;">Wyloguj</button>
                     </div>
                 </div>
@@ -202,8 +204,8 @@ function createStartView() {
 function updateUI(user) {
     const userInfoDiv = document.getElementById("user-info");
     const logoutButton = document.getElementById("logout-button");
-    const registerButton = document.getElementById("registerButton");
-    const loginButton = document.getElementById("loginButton");
+    const registerButton = document.getElementById("registerButtonRoute");
+    const loginButton = document.getElementById("loginButtonRoute");
 
     if (userInfoDiv) { 
         if (user) {
@@ -230,7 +232,7 @@ onAuthStateChanged(auth, (user) => {
 function createLoginView() {
     return `
         <div class="view-container">
-            <div class="view-content" id="login-form-container">
+            <div id="login-form-container">
                 <h2>Logowanie</h2>
                 <form id="loginForm">
                     <label for="loginEmail">Email:</label>
@@ -249,7 +251,7 @@ function createLoginView() {
 function createRegisterView() {
     return `
         <div class="view-container">
-            <div class="view-content" id="register-form-container">
+            <div id="register-form-container">
                 <h2>Rejestracja</h2>
                 <form id="registerForm">
                     <label for="registerEmail">Email:</label>
@@ -263,6 +265,7 @@ function createRegisterView() {
         </div>
     `;
 }
+
 async function uploadSignature(blob) {
     try {
         const token = await auth.currentUser.getIdToken(); // Pobierz token JWT
@@ -359,7 +362,7 @@ async function initializeEntryForm() {
 function createNewEntryView() {
     return `
         <div class="view-container">
-            <div class="view-content" id="new-entry-container">
+            <div id="new-entry-container">
                 <h2>Nowy wpis do książki</h2> 
                 <button data-route="/" >Wróć</button>
                 <form id="entryForm" enctype="multipart/form-data" method="post">
@@ -375,7 +378,6 @@ function createNewEntryView() {
 
                     <button type="submit">Zapisz do książki</button>
                 </form>
-                
             </div>
         </div>
     `;
@@ -393,7 +395,6 @@ function initializeSignaturePad() {
 // Widok książki
 function createReadBookView() {
     return `
-        
         <div class="table-background">
             <h2>Wpisy w książce</h2>
             <table id="entriesTable">
@@ -403,6 +404,7 @@ function createReadBookView() {
                         <th>Imię i nazwisko</th>
                         <th>Adres/Pozwolenie</th>
                         <th>Podpis</th>
+                        <th>Akcje</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
